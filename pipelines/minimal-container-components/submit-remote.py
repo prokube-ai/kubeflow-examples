@@ -8,7 +8,7 @@ import os
 import datetime
 from kfp.client import Client
 from kfp import compiler
-from pipeline import containerized_components_pipeline
+from pipeline import container_components_pipeline
 
 
 auth_session = get_istio_auth_session(
@@ -26,7 +26,7 @@ if __name__ == "__main__":
     client = Client(host=f"{os.environ['KUBEFLOW_ENDPOINT']}/pipeline", namespace=namespace,
                     cookies=auth_session["session_cookie"], verify_ssl=False)
 
-    compiler.Compiler().compile(containerized_components_pipeline, 'pipeline.yaml')
+    compiler.Compiler().compile(container_components_pipeline, 'pipeline.yaml')
 
     run = client.create_run_from_pipeline_package(
         'pipeline.yaml',

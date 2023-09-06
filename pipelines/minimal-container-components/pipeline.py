@@ -31,7 +31,7 @@ def copy_data(dataset: Input[Dataset], output: Output[Markdown]):
 
 
 @dsl.pipeline
-def containerized_components_pipeline(input1: str, input2: str):
+def container_components_pipeline(input1: str, input2: str):
     # input1 and input2 arguments are exposed also in the UI
     result00 = ingest_data(input_data=input1)
     result01 = ingest_data(input_data=input2)
