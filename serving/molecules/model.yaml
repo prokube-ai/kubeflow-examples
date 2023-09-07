@@ -1,0 +1,22 @@
+apiVersion: serving.kserve.io/v1beta1
+kind: InferenceService
+metadata:
+  name: chem-classifier-model
+spec:
+  predictor:
+    model:
+      modelFormat:
+        name: sklearn
+      runtime: kserve-mlserver
+      storageUri: gs://kfserving-examples/models/torchserve/image_classifier
+  transformer:
+    containers:
+      - image: kubeflow-examples/chem-util
+        name: kserve-container
+        command:
+          - "/opt/conda/bin/python"
+          - "/opt/project/images/molecules/model-transformer.py"
+          - "serve_transformer"
+        args:
+          - --model_name
+          - chem-classifier
