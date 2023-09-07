@@ -1,6 +1,6 @@
 # chem-util
 A simple python script that reads in a CSV with SMILES, calculates molecular fingerprints, trains a model and 
-evaluates it.
+evaluates it. It is the basis for `pipelines/molecules` pipeline.
 
 ## Local run
 Help
