@@ -16,5 +16,6 @@ if __name__ == "__main__":
             "input1": "Hello",
             "input2": "world!"
         },
+        experiment_name='minimal-container-components-experiment',
         run_name=f'Simple pipeline {datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")}'
     )
