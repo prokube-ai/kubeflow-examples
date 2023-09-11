@@ -8,14 +8,14 @@ spec:
       modelFormat:
         name: sklearn
       runtime: kserve-mlserver
-      storageUri: gs://kfserving-examples/models/torchserve/image_classifier
+      storageUri: s3://kubeflow-examples/models/output.joblib
   transformer:
     containers:
-      - image: kubeflow-examples/chem-util
+      - image: kubeflow-examples/chem-util:e79ef6c9
         name: kserve-container
         command:
           - "/opt/conda/bin/python"
-          - "/opt/project/images/molecules/model-transformer.py"
+          - "/app/model-transformer.py"
           - "serve_transformer"
         args:
           - --model_name
