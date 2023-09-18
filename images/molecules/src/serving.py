@@ -5,13 +5,8 @@ from typing import Dict
 import logging
 from rdkit import Chem
 from .features import get_cfps
-import pathlib
 import os
-#import s3fs
 
-#S3_ENDPOINT = 'http://minio.minio'
-#AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID', None) or 'minio'
-#AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY', None)
 
 logging.basicConfig(level=constants.KSERVE_LOGLEVEL)
 
@@ -51,9 +46,3 @@ class MolPredictor(Model):
             return {"predictions": result}
         except Exception as e:
             raise InferenceError(str(e))
-
-
-if __name__ == "__main__":
-    mt = MolTransformer("n", 'localhost')
-    model = MolPredictor('m')
-    mt

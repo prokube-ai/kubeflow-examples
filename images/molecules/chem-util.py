@@ -1,6 +1,5 @@
 import click
 import logging
-import random
 import pandas as pd
 from src.features import get_cfps
 from src.utils import mol2html
@@ -25,10 +24,10 @@ def cli():
 @click.option('--output-data', '-o', help="Path to the output.", required=True, type=str)
 @click.option('--fp-bits', '-n', help="Number of the fingerprint bits.", required=False, type=int,
               default=1024)
-@click.option('--id', '-d', help="Name of the ID col.", required=False, type=str, default='ID')
+@click.option('--id_col', '-d', help="Name of the ID col.", required=False, type=str, default='ID')
 @click.option('--target', '-t', help="Name of the target col.", required=False, type=str, default='class')
 @click.option('--sample', '-s', help="Path to where to store class samples.", required=False, type=str)
-def preprocess(input_data, output_data, fp_bits, id, target, sample):
+def preprocess(input_data, output_data, fp_bits, id_col, target, sample):
     logger.info(f"Reading in {input_data}.")
     df = pd.read_csv(input_data, index_col=0, compression='zip')
     logger.info("Calculating features.")
@@ -41,7 +40,7 @@ def preprocess(input_data, output_data, fp_bits, id, target, sample):
         )
     )
     logger.info(f"Storing to {output_data}.")
-    df[[id, target] + fp_cols].to_csv(output_data, compression='zip')
+    df[[id_col, target] + fp_cols].to_csv(output_data, compression='zip')
     if sample:
         md_data = """# Sample molecules\n"""
 
@@ -64,10 +63,12 @@ def preprocess(input_data, output_data, fp_bits, id, target, sample):
 @click.option('--seed', '-f', help="Random seed.",
               required=False, type=int, default=42)
 def split(input_data, output_train, output_test, test_fraction, seed):
+    if not(0.0 < test_fraction < 1.0):
+        raise ValueError(f"test_fraction should be between 0 and 1. Provided was {test_fraction}")
     logger.info(f"Reading in {input_data}.")
     df = pd.read_csv(input_data, index_col=0, compression='zip')
     logger.info("Splitting.")
-    train, test = train_test_split(list(range(len(df))), random_state=seed)
+    train, test = train_test_split(list(range(len(df))), random_state=seed, test_size=test_fraction)
     logger.info(f"Storing to {output_train}.")
     df.iloc[train].to_csv(output_train, compression='zip')
     logger.info(f"Storing to {output_test}.")

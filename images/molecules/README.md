@@ -1,6 +1,6 @@
 # chem-util
 A simple python script that reads in a CSV with SMILES, calculates molecular fingerprints, trains a model and 
-evaluates it. It is the basis for `pipelines/molecules` pipeline.
+evaluates it. It is the basis for `pipelines/molecules` pipeline whre you will also find the main README.
 
 ## Local run
 Help
@@ -25,3 +25,7 @@ docker run chem-util --help
 # Jumping into the container with bound local folder
 docker run --entrypoint /bin/bash -it -v <local-path>:<container-path> chem-util
 ```
+
+# model-serving
+`model-serving.py` contains the code of KServe transformer and custom predictor. It can be deployed as KServe
+InferenceService by using [model.yaml](../../serving/molecules/model.yaml).

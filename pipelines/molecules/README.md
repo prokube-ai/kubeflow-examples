@@ -5,7 +5,7 @@ you Kubeflow deployment.
 
 ## Usage
 ### Compiling the pipeline
-Pielines are usually compiled in [IR YAML](https://www.kubeflow.org/docs/components/pipelines/v2/compile-a-pipeline/#ir-yaml) 
+Pipelines are usually compiled in [IR YAML](https://www.kubeflow.org/docs/components/pipelines/v2/compile-a-pipeline/#ir-yaml) 
 before being uploaded to Kubeflow.
 
 ```shell
@@ -41,3 +41,26 @@ You can compare successful runs by selecting at least two runs and then click *"
 <img src="assets/compare-runs.png" alt="Compare Runs" width="600"/>
 
 ### Model serving
+Model serving uses a custom predictors as well as a transformer. We need the transformer to convert 
+[SMILES](https://en.wikipedia.org/wiki/Simplified_molecular-input_line-entry_system) representation of molecules to bit 
+vectors which is something that model (predictor) can then work with.  
+You can find predictor and transformer in [images/molecules](../../images/molecules) folder in `model-serving.py`.
+The manifest of InferenceService is in [serving/molecules](../../serving/molecules). The inference service can be 
+applied by copy/pasting the manifest into "New Endpoint" window in Kubeflow UI or via commandline:
+
+```shell
+kubectl apply -f serving/molecules/model.yaml -n <my-namespace>
+```
+
+#### Making predictions
+The inference service will become available at an internal and external URL. You can find those in the endpoint url.
+You can use those url to make requests:
+```python
+import requests
+payload = {'instances': ["CCCC", "c1cc(O)ccc1"]}
+response = requests.post(
+    '<protocol>://<endpoint>.<namespace>.svc.cluster.local/v1/models/<model-name>:predict',
+    json=payload,
+)
+print(response.content)
+```

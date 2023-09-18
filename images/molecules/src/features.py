@@ -7,7 +7,7 @@ import numpy as np
 def get_cfps(mol: Mol, radius: int = 1, nBits: int = 1024, useFeatures: bool = False,
              dtype: np.dtype = np.int8) -> np.ndarray:
     """Calculates circular (Morgan) fingerprint.
-    http://rdkit.org/docs/GettingStartedInPython.html#morgan-fingerprints-circular-fingerprints
+    https://rdkit.org/docs/GettingStartedInPython.html#morgan-fingerprints-circular-fingerprints
 
     Parameters
     ----------

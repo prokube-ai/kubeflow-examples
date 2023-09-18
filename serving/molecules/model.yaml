@@ -32,3 +32,5 @@ spec:
         args:
           - --model_name
           - chem-classifier
+          - --n_bits
+          - '2048'
