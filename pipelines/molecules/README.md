@@ -64,3 +64,7 @@ response = requests.post(
 )
 print(response.content)
 ```
+Equivalent curl command using external endpoint:
+```
+curl -k '<external-url-as-reported-by-inference-service>/v1/models/chem-classifier:predict' -d '{"instances": ["CCCC", "c1cc(O)ccc1"]}'
+```
