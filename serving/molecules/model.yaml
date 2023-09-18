@@ -1,21 +1,33 @@
 apiVersion: serving.kserve.io/v1beta1
 kind: InferenceService
 metadata:
-  name: chem-classifier-model
+  name: chem-classifier
 spec:
   predictor:
-    model:
-      modelFormat:
-        name: sklearn
-      runtime: kserve-mlserver
-      storageUri: s3://kubeflow-examples/models/output.joblib
-  transformer:
     containers:
-      - image: kubeflow-examples/chem-util:e79ef6c9
-        name: kserve-container
+      - name: sklearn-custom-container
+        image: gitlab-demo.prokube.ai:4567/kiss/kubeflow-examples/chem-util:latest
+        imagePullPolicy: Always
         command:
           - "/opt/conda/bin/python"
-          - "/app/model-transformer.py"
+          - "/app/model-serving.py"
+          - "serve_predictor"
+        args:
+          - --model_name
+          - chem-classifier
+        env:
+          - name: STORAGE_URI
+            value: "s3://kubeflow-examples/models/output.joblib"
+          - name: MODEL_FILENAME
+            value: "output.joblib"
+  transformer:
+    containers:
+      - image: gitlab-demo.prokube.ai:4567/kiss/kubeflow-examples/chem-util:latest
+        imagePullPolicy: Always
+        name: transformer-container
+        command:
+          - "/opt/conda/bin/python"
+          - "/app/model-serving.py"
           - "serve_transformer"
         args:
           - --model_name

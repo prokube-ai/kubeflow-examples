@@ -39,3 +39,5 @@ By clicking on a specific run you can monitor progress and see other details.
 You can compare successful runs by selecting at least two runs and then click *"Compare runs"*.
 
 <img src="assets/compare-runs.png" alt="Compare Runs" width="600"/>
+
+### Model serving
