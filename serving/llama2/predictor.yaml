@@ -1,0 +1,32 @@
+apiVersion: serving.kserve.io/v1beta1
+kind: InferenceService
+metadata:
+  name: llama2-chat
+spec:
+  predictor:
+    containers:
+      - name: kserve-container
+        image: IMAGE_REGISTRY/llama2-chat:TAG
+        command:
+          - "python"
+        args:
+          - "main.py"
+          - "--device"
+          - "0"
+          - "--hf-model-string"
+          - "meta-llama/Llama-2-13b-chat-hf"
+          - "--name"
+          - "llama2-chat"
+          - "--loglevel"
+          - "INFO"
+        env:
+          - name: HF_ACCESS_TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: hf-token-secret
+                key: HF_TOKEN
+        resources: 
+          limits:
+            memory: "32Gi"
+            cpu: "16"
+
