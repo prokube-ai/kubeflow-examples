@@ -1,0 +1,93 @@
+apiVersion: "kubeflow.org/v1"
+kind: PyTorchJob
+metadata:
+  name: pytorch-lightning-mnist
+  namespace: henrik-steude
+spec:
+  pytorchReplicaSpecs:
+    Master:
+      replicas: 1
+      restartPolicy: OnFailure
+      template:
+        metadata:
+          annotations:
+            sidecar.istio.io/inject: "false"
+        spec:
+          containers:
+            - name: pytorch
+              image: GITLABREGISTRY/kiss/kubeflow-examples/pytorch-lightning-mnist-training:IMAGE_TAG
+              imagePullPolicy: Always
+              command:
+                - "python"
+                - "run_training.py"
+                - "--epochs=3"
+                - "--batch_size=32"
+                - "--learning_rate=0.001"
+                - "--run_as_pytorchjob=True"
+                - "--dropout_rate=0.2"
+                - "--logs_bucket=kubeflow-examples"
+                - "--logs_folder=mnist-logs"
+                - "--sync_with_minio=True"
+                - "--num_nodes=3"
+                - "--num_data_loader_workers=10"
+                - "--use_std_out_logger=False"
+              env:
+                - name: AWS_ACCESS_KEY_ID
+                  valueFrom:
+                    secretKeyRef:
+                      name: s3creds
+                      key: AWS_ACCESS_KEY_ID
+                - name: AWS_SECRET_ACCESS_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: s3creds
+                      key: AWS_SECRET_ACCESS_KEY
+                - name: S3_ENDPOINT
+                  value: "minio.minio"
+                - name: S3_USE_HTTPS
+                  value: "0"
+                - name: S3_VERIFY_SSL
+                  value: "0"
+    Worker:
+      replicas: 2
+      restartPolicy: OnFailure
+      template:
+        metadata:
+          annotations:
+            sidecar.istio.io/inject: "false"
+        spec:
+          containers:
+            - name: pytorch
+              image: GITLABREGISTRY/kiss/kubeflow-examples/pytorch-lightning-mnist-training:IMAGE_TAG
+              imagePullPolicy: Always
+              command:
+                - "python"
+                - "run_training.py"
+                - "--epochs=3"
+                - "--batch_size=32"
+                - "--learning_rate=0.001"
+                - "--run_as_pytorchjob=True"
+                - "--dropout_rate=0.2"
+                - "--logs_bucket=kubeflow-examples"
+                - "--logs_folder=mnist-logs"
+                - "--sync_with_minio=True"
+                - "--num_nodes=3"
+                - "--num_data_loader_workers=10"
+                - "--use_std_out_logger=False"
+              env:
+                - name: AWS_ACCESS_KEY_ID
+                  valueFrom:
+                    secretKeyRef:
+                      name: s3creds
+                      key: AWS_ACCESS_KEY_ID
+                - name: AWS_SECRET_ACCESS_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: s3creds
+                      key: AWS_SECRET_ACCESS_KEY
+                - name: S3_ENDPOINT
+                  value: "minio.minio"
+                - name: S3_USE_HTTPS
+                  value: "0"
+                - name: S3_VERIFY_SSL
+                  value: "0"

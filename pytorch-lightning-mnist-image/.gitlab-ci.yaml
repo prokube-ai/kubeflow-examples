@@ -1,0 +1,34 @@
+variables:
+  CI_DEBUG_TRACE: "true"
+  IMAGE_NAME: "pytorch-lightning-mnist-training"
+  REGISTRY_HOME: "${CI_REGISTRY}/kiss/kubeflow-examples/"
+  DEFAULT_TAG: "latest"
+
+stages:
+  - pytorch-lightning-mnist-build
+
+# using kaniko for docker builds because it's more secure and runs unprivileged on k8s or docker
+pytorch-lightning-mnist-build:
+  stage: pytorch-lightning-mnist-build
+  inherit:
+    default: false
+  image:
+    name: gcr.io/kaniko-project/executor:debug
+    entrypoint: [""]
+  script:
+    - mkdir -p /kaniko/.docker
+    # adding our cert to kaniko's additional certs
+    - cat ${CI_SERVER_TLS_CA_FILE} >> /kaniko/ssl/certs/additional-ca-cert-bundle.crt
+    # Creating kaniko config
+    - >
+      echo "{\"auths\":{\"${CI_REGISTRY}\":{\"auth\":\"$(printf "%s:%s" "${CI_REGISTRY_USER}" "${CI_REGISTRY_PASSWORD}" 
+      | base64 | tr -d '\n')\"}}}" > /kaniko/.docker/config.json
+    - cat /kaniko/.docker/config.json
+    # Building the container image
+    - >
+      /kaniko/executor
+      --context "${CI_PROJECT_DIR}/pytorch-lightning-mnist-image/"
+      --dockerfile "${CI_PROJECT_DIR}/pytorch-lightning-mnist-image/Dockerfile"
+      --destination "${CI_REGISTRY}/${CI_PROJECT_PATH}/${IMAGE_NAME}:${DEFAULT_TAG}"
+      --destination "${CI_REGISTRY}/${CI_PROJECT_PATH}/${IMAGE_NAME}:commit-${CI_COMMIT_SHORT_SHA}"
+      --build-arg REGISTRY=${REGISTRY_HOME}

@@ -1,0 +1,65 @@
+apiVersion: kubeflow.org/v1beta1
+kind: Experiment
+metadata:
+  name: mnist-k8s-experiment
+  namespace: NAMESPACE
+spec:
+  parallelTrialCount: 3
+  maxTrialCount: 12
+  maxFailedTrialCount: 3
+  metricsCollectorSpec:
+    collector:
+      kind: StdOut
+  objective:
+    type: minimize
+    goal: 0.001
+    objectiveMetricName: val_loss
+  algorithm:
+    algorithmName: random
+  parameters:
+    - name: learning_rate
+      parameterType: double
+      feasibleSpace:
+        min: "0.001"
+        max: "0.1"
+    - name: batch_size
+      parameterType: int
+      feasibleSpace:
+        min: "64"
+        max: "256"
+  trialTemplate:
+    primaryContainerName: training-container
+    trialParameters:
+      - name: learningRate
+        description: Learning rate for the training model
+        reference: learning_rate
+      - name: batchSize
+        description: Batch size for the training model
+        reference: batch_size
+    trialSpec:
+      apiVersion: batch/v1
+      kind: Job
+      spec:
+        template:
+          metadata:
+            annotations:
+              sidecar.istio.io/inject: "false"
+          spec:
+            containers:
+              - name: training-container
+                image: GITLABREGISTRY/kiss/kubeflow-examples/pytorch-lightning-mnist-training:IMAGE_TAG
+                command:
+                  - "python"
+                  - "run_training.py"
+                  - "--epochs=2"
+                  - "--batch_size=${trialParameters.batchSize}"
+                  - "--learning_rate=${trialParameters.learningRate}"
+                  - "--run_as_pytorchjob=False"
+                  - "--dropout_rate=0.2"
+                  - "--logs_bucket=kubeflow-examples"
+                  - "--logs_folder=mnist-logs"
+                  - "--sync_with_minio=False"
+                  - "--num_nodes=1"
+                  - "--num_data_loader_workers=10"
+                  - "--use_std_out_logger=True"
+            restartPolicy: Never

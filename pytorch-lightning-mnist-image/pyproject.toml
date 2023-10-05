@@ -1,0 +1,32 @@
+[tool.poetry]
+name = "pytorch-job"
+version = "0.1.0"
+description = ""
+authors = ["hsteude <henrik.steude@gmail.com>"]
+readme = "README.md"
+packages = []
+
+[tool.poetry.dependencies]
+python = "^3.9"
+torch = "2.0.0"
+pytorch-lightning = "^2.0.7"
+click = "^8.1.7"
+torchvision = "0.15.1"
+s3fs = "^2023.6.0"
+loguru = "^0.7.0"
+tensorboard = "^2.14.0"
+
+
+[tool.poetry.group.dev.dependencies]
+ipython = "^8.14.0"
+ipdb = "^0.13.13"
+pdbpp = "^0.10.3"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+
+[tool.pyright]
+venvPath = "."
+venv = ".venv"
