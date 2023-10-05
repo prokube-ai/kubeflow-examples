@@ -1,0 +1,25 @@
+[tool.poetry]
+name = "llama2-chat-ui"
+version = "0.1.0"
+description = ""
+authors = ["hsteude <henrik.steude@gmail.com>"]
+readme = "README.md"
+# packages = [{include = "llama2_chat_ui"}]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+dash = "^2.13.0"
+dash-bootstrap-components = "^1.5.0"
+
+[tool.poetry.group.dev.dependencies]
+ipython = "^8.16.1"
+ipdb = "^0.13.13"
+pdbpp = "^0.10.3"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.pyright]
+venvPath = "."
+venv = ".venv"
