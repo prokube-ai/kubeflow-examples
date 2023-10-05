@@ -1,0 +1,5 @@
+MNIST/*
+kubeflow-examples/*
+.venv/*
+__pycache__/*
+

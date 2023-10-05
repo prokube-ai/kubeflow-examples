@@ -1,0 +1,11 @@
+poetry run python run_training.py \
+    --batch_size 128 \
+    --learning_rate 0.002 \
+    --epochs 2 \
+    --run_as_pytorchjob False \
+    --logs_bucket "kubeflow-examples" \
+    --logs_folder "mnist-logs" \
+    --sync_with_minio True \
+    --num_nodes  1 \
+    --num_data_loader_workers  10 \
+    --use_std_out_logger True
