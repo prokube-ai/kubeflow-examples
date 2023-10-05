@@ -40,32 +40,16 @@ chem-util-build:
         - images/molecules/**/*
 
 
+pytorch-mnist-build:
+  stage: build-image
+  script:
+    - >
+      /kaniko/executor
+      --context "${CI_PROJECT_DIR}/images/pytorch-lightning-mnist-image/"
+      --dockerfile "${CI_PROJECT_DIR}/images/pytorch-lightning-mnist-image/Dockerfile"
+      --destination "${CI_REGISTRY}/${CI_PROJECT_PATH}/pytorch-lightning-mnist-training:latest"
+      --destination "${CI_REGISTRY}/${CI_PROJECT_PATH}/pytorch-lightning-mnist-training:commit-${CI_COMMIT_SHORT_SHA}"
 
-## old
-# include:
-#   - local: common.gitlab-ci.yaml
-#
-# stages:
-#   - load_cache
-#   - triggers
-#
-# load-kaniko-cache:
-#   stage: load_cache
-#   script:
-#     - >
-#       /kaniko/warmer
-#       --cache-dir=${KANIKO_CACHE}
-#       --image="nvidia/cuda:11.7.1-base-ubuntu20.04" 
-#       --image="condaforge/mambaforge:latest"
-#
-# trigger-pytorch-lightning-mnist-image:
-#   stage: triggers
-#   trigger:
-#     include:
-#       - local: common.gitlab-ci.yaml
-#       - local: pytorch-lightning-mnist-image/.gitlab-ci.yaml 
-#   rules:
-#     - if: $TRIGGER_ALL == "1"
-#     - changes:
-#         - pytorch-lightning-mnist-image/**/*
-#
+  rules:
+    - changes:
+        - images/pytorch-lightning-mnist-image/**/*
