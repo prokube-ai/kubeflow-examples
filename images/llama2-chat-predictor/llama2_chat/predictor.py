@@ -12,13 +12,6 @@ from kserve import (
     InferResponse,
 )
 
-import os
-import json
-import transformers
-from typing import Union, Dict
-from kserve import Model, InferRequest, InferResponse
-from transformers import AutoTokenizer
-
 
 class Llama2ChatPredictor(Model):
     def __init__(
@@ -61,11 +54,10 @@ class Llama2ChatPredictor(Model):
             device=self.device,
         )
 
-
     def preprocess(
         self,
         payload: Union[bytes, InferRequest],
-        headers: Dict[str, str] = None,  
+        headers: Dict[str, str] = None,
     ) -> Dict:
         """
         Preprocess the payload into the format expected by the predict method.
@@ -78,7 +70,6 @@ class Llama2ChatPredictor(Model):
             the payload as a dict
         """
         return payload if type(payload) == dict else json.loads(payload)
-
 
     def predict(
         self,
