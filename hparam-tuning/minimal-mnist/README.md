@@ -4,15 +4,17 @@ This example demonstrates the use of Katib for hyperparameter tuning with a
 simple scikit-learn model trained on the MNIST dataset.
 
 ## Steps
+Generally, the following four steps are required to run a hyperparameter tuning 
+experiment using custom training code. However, Steps 1 and 2 are covered in 
+the corresponding image directory `./images/minimal-mnist/`:
 1. Write the training code.
 2. Create a Dockerfile for the training environment.
 3. Build the training image.
 4. Define the experiment YAML file for the Katib experiment.
 
-Steps 1 and 2 are described in the corresponding `images/minimal-mnist` 
-directory of this repository. For building the image (Step 3), instructions 
-are also available in the same directory. Additionally, this image will be 
-automatically built by the Gitlab runner upon pushing this repository to Gitlab.
+For building the image (Step 3), instructions are available in the same 
+directory. Additionally, this image will be automatically built by the Gitlab 
+runner upon pushing this repository to Gitlab.
 
 For Step 4, you can use the example provided in this directory.
 
