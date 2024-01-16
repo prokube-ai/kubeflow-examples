@@ -1,0 +1,85 @@
+---
+apiVersion: kubeflow.org/v1beta1
+kind: Experiment
+metadata:
+  name: random-mnist
+spec:
+  objective:
+    type: maximize
+    goal: 1.2
+    objectiveMetricName: Validation-Accuracy
+    additionalMetricNames:
+      - Train-Accuracy
+  algorithm:
+    algorithmName: bayesianoptimization
+  parallelTrialCount: 3
+  maxTrialCount: 6
+  maxFailedTrialCount: 3
+  resumePolicy: LongRunning
+  parameters:
+    - name: gamma
+      parameterType: double
+      feasibleSpace:
+        min: "0.01"
+        max: "0.1"
+    - name: c
+      parameterType: double
+      feasibleSpace:
+        min: "1"
+        max: "100"
+    - name: kernel
+      parameterType: categorical
+      feasibleSpace:
+        list:
+          - rbf
+          # - linear
+          # - poly
+          - sigmoid
+    - name: degree
+      parameterType: int
+      feasibleSpace:
+        min: "2"
+        max: "5"
+  metricsCollectorSpec:
+    collector:
+      kind: StdOut
+  trialTemplate:
+    primaryContainerName: training-container
+    trialParameters:
+      - name: gamma
+        description: Kernel coefficient for rbf, poly and sigmoid
+        reference: gamma
+      - name: c
+        description: Regularization parameter
+        reference: c 
+      - name: kernel
+        description: Specifies the kernel type to be used in the algorithm
+        reference: kernel
+      - name: degree
+        description: Degree of the polynomial kernel function
+        reference: degree
+    trialSpec:
+      apiVersion: batch/v1
+      kind: Job
+      spec:
+        template:
+          metadata:
+            annotations:
+              sidecar.istio.io/inject: "false"
+          spec:
+            containers:
+              - name: training-container
+                image: MNIST-IMAGE
+                command:
+                  - "python"
+                  - "./training_script.py"
+                  - "--gamma=${trialParameters.gamma}"
+                  - "--c=${trialParameters.c}"
+                  - "--kernel=${trialParameters.kernel}"
+                  - "--degree=${trialParameters.degree}"
+                resources:
+                  limits:
+                    memory: "1Gi"
+                    cpu: "0.5"
+            restartPolicy: Never
+

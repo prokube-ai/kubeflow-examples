@@ -38,3 +38,17 @@ chem-util-build:
   rules:
     - changes:
         - images/molecules/**/*
+
+mnsist-katib-build:
+  stage: build-image
+  script:
+    - >
+      /kaniko/executor
+      --context "${CI_PROJECT_DIR}/images/minimal-mnist/"
+      --dockerfile "${CI_PROJECT_DIR}/images/minimal-mnist/Dockerfile"
+      --destination "${CI_REGISTRY}/${CI_PROJECT_PATH}/minimal-mnist:latest"
+      --destination "${CI_REGISTRY}/${CI_PROJECT_PATH}/minimal-mnist:${CI_COMMIT_SHORT_SHA}"
+
+  rules:
+    - changes:
+        - images/minimal-mnist/**/*
