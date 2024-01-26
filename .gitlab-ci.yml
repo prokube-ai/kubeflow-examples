@@ -52,3 +52,17 @@ mnsist-katib-build:
   rules:
     - changes:
         - images/minimal-mnist/**/*
+
+llama2-chat-predictor-build:
+  stage: build-image
+  script:
+    - >
+      /kaniko/executor
+      --context "${CI_PROJECT_DIR}/images/llama2-chat-predictor/"
+      --dockerfile "${CI_PROJECT_DIR}/images/llama2-chat-predictor/Dockerfile"
+      --destination "${CI_REGISTRY}/${CI_PROJECT_PATH}/llama2-chat-predictor:latest"
+      --destination "${CI_REGISTRY}/${CI_PROJECT_PATH}/llama2-chat-predictor:${CI_COMMIT_SHORT_SHA}"
+
+  rules:
+    - changes:
+        - images/llama2-chat-predictor/**/*

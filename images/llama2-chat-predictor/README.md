@@ -1,6 +1,12 @@
 # Llama2 Deployment
 
-For deploying the Llama2 model, we will create a custom predictor using KServe. KServe provides a way to implement a custom model server, enabling you to bring your own models and pre/post-processing code. If you are new to creating custom predictors with KServe, you may read more about it in the [KServe documentation](https://kserve.github.io/website/0.8/modelserving/v1beta1/custom/custom_model/).
+For deploying the Llama2 model, we will create a custom predictor using KServe.
+This directory holds all the code as well as the Dockerfile to create
+the image for the llama2 deployment in kserve.
+The steps for the actual deployment in kserve can also be found in this repository
+(`/serving/llama2-chat`).
+
+If you are new to creating custom predictors with KServe, you may read more about it in the [KServe documentation](https://kserve.github.io/website/0.8/modelserving/v1beta1/custom/custom_model/).
 
 For a gentle introduction and detailed guide on working with Llama2, consider reading this blog post: [How to prompt Llama](https://replicate.com/blog/how-to-prompt-llama).
 
@@ -17,20 +23,6 @@ The code expects an environment variable named `HF_ACCESS_TOKEN` that holds the 
 To set this variable for a local deployment, run:
 ```sh
 export HF_ACCESS_TOKEN=<example-token>
-```
-
-### Creating a Kubernetes Secret
-
-We've created a file called hf-token-secret.yaml in this directory to create a 
-Kubernetes secret that holds the access token (which we'll need for the kserve 
-deployment later on). First, encode the token to base64 by running:
-```sh
-echo -n <example-token> | base64
-```
-
-Now, the output of the above command can be used to create the Kubernetes secret:
-```sh
-sed 's/HF_ACCESS_TOKEN/<example-token-base64>/' hf-token-secret.yaml | kubectl apply -n <your-namespace> -f -
 ```
 
 ## Run/develop Locally
@@ -54,6 +46,7 @@ samples with the best scores, from which we sample) and max_length in the API qu
 
 ## Build and Push Image
 
+### Using docker
 To build the model using Docker, do:
 ```sh
 docker build -t <your-image-registry-name>/llama2-chat:<TAG> .
@@ -73,20 +66,12 @@ Now, you can push the image using Docker:
 docker push <image-repository-name>/llama2-chat:<TAG>
 ```
 
-## Deploy on KServe
+### Using GitLab Runner with Kaniko
+Automated Build: Trigger an automatic build by committing a change to
+any file in or under the directory where this README lives. This activates
+a GitLab CI/CD pipeline using Kaniko. The built image will receive two tags:
 
-Ensure there is a secret called hf-token-secret in your namespace and run this
-to create the KServe inference service:
-```
-sed 's/IMAGE_REGISTRY/<your-image-registry>/;s/TAG/<your-tag>/' predictor.yaml | kubectl create -n <your-namespace> -f -
-```
-Note that you might need to change the command in the `prediction.yaml` to match your hardware.
+latest: Always points to the most recent build.
+commit-<SHORT_COMMIT_HASH>: Associates the image with a specific
+Git commit.
 
-### Run Query Against the KServe Deployment
-
-First, wait for the API to be ready; you can observe the progress and logs, etc.,
-in the Kubeflow UI under models. Once it's ready, you can copy the internal URL from
-the Kubeflow UI and try:
-```sh
-curl <internal-inference-url> -d '{"top_k": 3, "max_length": 100, "instances": ["Why is MLOps so important?"]}'
-```
