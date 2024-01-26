@@ -74,4 +74,3 @@ a GitLab CI/CD pipeline using Kaniko. The built image will receive two tags:
 latest: Always points to the most recent build.
 commit-<SHORT_COMMIT_HASH>: Associates the image with a specific
 Git commit.
-
