@@ -39,6 +39,7 @@ chem-util-build:
     - changes:
         - images/molecules/**/*
 
+
 mnsist-katib-build:
   stage: build-image
   script:
@@ -52,3 +53,18 @@ mnsist-katib-build:
   rules:
     - changes:
         - images/minimal-mnist/**/*
+
+
+llama2-chat-ui-build:
+  stage: build-image
+  script:
+    - >
+      /kaniko/executor
+      --context "${CI_PROJECT_DIR}/images/llama2-chat-ui/"
+      --dockerfile "${CI_PROJECT_DIR}/images/llama2-chat-ui/Dockerfile"
+      --destination "${CI_REGISTRY}/${CI_PROJECT_PATH}/llama2-chat-ui:latest"
+      --destination "${CI_REGISTRY}/${CI_PROJECT_PATH}/llama2-chat-ui:${CI_COMMIT_SHORT_SHA}"
+
+  rules:
+    - changes:
+        - images/llama2-chat-ui/**/*
