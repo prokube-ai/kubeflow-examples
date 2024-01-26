@@ -1,7 +1,7 @@
 TOP_K = 5
 MAX_LENGTH = 4000
 MAX_HISTORY_WORDS = 2500
-MODEL_URL = "http://llama2-chat.henrik-steude.svc.cluster.local/v1/models/llama2-chat:predict"
+MODEL_URL = "<example-internal-model-url>"
 SYSTEM_PROMPT = """<s>[INST] <<SYS>>
 You are Proby the Prokube Llama, a helpful, respectful, and honest assistant.
 Always aim to answer as helpfully as possible while ensuring safety.
