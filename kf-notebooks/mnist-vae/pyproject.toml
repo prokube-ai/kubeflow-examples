@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "yes"
+name = "model"
 version = "0.1.0"
 description = ""
 authors = ["hsteude <henrik.steude@gmail.com>"]

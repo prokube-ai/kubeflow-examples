@@ -1,10 +1,15 @@
 # Minimal Example: MNIST VAE with Kubeflow
 
-This example demonstrates a) how Kubeflow notebooks can be used as a full-featured Python IDE, and b) how Kubeflow's TensorBoard feature can be utilized for tracking PyTorch training sessions. This repository contains a minimal example of a Variational Autoencoder (VAE) designed to generate MNIST images as a generative model.
+This example demonstrates a) how Kubeflow notebooks can be used as a full-featured Python IDE, and b) how Kubeflow's 
+TensorBoard feature can be utilized for tracking PyTorch training sessions. This repository contains a minimal example 
+of a Variational Autoencoder (VAE) designed to generate MNIST images as a generative model.
 
 ## Installation
 
-In this directory, run:
+This example uses [Poetry](https://python-poetry.org/) to set up an environment. You can install it with 
+`pip install poetry`.  
+
+Install the environment by running in this directory:
 
 ```sh
 poetry install
