@@ -8,8 +8,8 @@ of a Variational Autoencoder (VAE) designed to generate MNIST images as a genera
 
 This example uses [Poetry](https://python-poetry.org/) to set up an environment. You can install it with 
 `pip install poetry`.  
-
-Install the environment by running in this directory:
+Ensure that you have Python version 3.9 or higher installed on your system. To
+install the dependencies, run the following command in this directory:
 
 ```sh
 poetry install
