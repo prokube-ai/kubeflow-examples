@@ -1,4 +1,4 @@
-FROM nvcr.io/nvidia/pytorch:24.10-py3
+FROM pytorch/pytorch:latest
 RUN apt-get update && apt-get install -y libglib2.0-0
 RUN mkdir /app
 WORKDIR /app
