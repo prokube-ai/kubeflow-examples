@@ -22,7 +22,7 @@ The code expects an environment variable named `HF_ACCESS_TOKEN` that holds the 
 
 To set this variable for a local deployment, run:
 ```sh
-export HF_ACCESS_TOKEN=<example-token>
+ export HF_ACCESS_TOKEN=<example-token>
 ```
 
 ## Run/develop Locally
@@ -30,9 +30,9 @@ export HF_ACCESS_TOKEN=<example-token>
 To run it locally, you'll need to first install the Python dependencies. To
 do so, run the following from this directory:
 ```
-poetry install .
-export HF_ACCESS_TOKEN=<example-token>
-poetry run python main.py --name "llama2-chat" --device "cpu" --hf-model-string "meta-llama/Llama-2-13b-chat-hf"
+poetry install
+ export HF_ACCESS_TOKEN=<example-token>
+poetry run python main.py --name "llama2-chat" --device "cpu" --hf-model-string "meta-llama/Llama-2-7b-chat-hf"
 ```
 
 ### Run Query Against Local Deployment
@@ -49,7 +49,7 @@ samples with the best scores, from which we sample) and max_length in the API qu
 ### Using docker
 To build the model using Docker, do:
 ```sh
-docker build -t <your-image-registry-name>/llama2-chat:<TAG> .
+docker build -t <your-image-registry-name>/llama2-chat:<TAG> . --platform=linux/amd64
 ```
 
 To use this image in kserve, we'll also need to push it to an image registry.
