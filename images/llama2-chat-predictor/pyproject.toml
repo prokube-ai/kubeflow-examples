@@ -8,12 +8,12 @@ packages = [{include = "llama2_chat"}]
 [tool.poetry.dependencies]
 python = ">=3.9,<3.12"
 transformers = "^4.33.3"
-torch = ">=2.0.0, !=2.0.1"
+torch = ">=2.0.0"
 accelerate = "^0.23.0"
 datasets = "^2.14.5"
 huggingface-hub = "^0.17.3"
 loguru = "^0.7.2"
-kserve = "^0.11.1"
+kserve = ">=0.11.1"
 
 [tool.poetry.group.dev.dependencies]
 ipython = "^8.16.1"
