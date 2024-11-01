@@ -6,7 +6,7 @@ on:
 env:
   DOCKERFILE_PATH: "images/llama2-chat-predictor/Dockerfile"
   BUILD_CONTEXT_DIR: "images/llama2-chat-predictor/"
-  IMAGE_NAME: "mlflow-server"
+  IMAGE_NAME: "llama-model"
   IMAGE_PUSH_PATH: "${{ secrets.GCP_ARTIFACT_REGISTRY_PATH }}"
   IMAGE_PUSH_SECRET: "${{ secrets.GCP_SA_KEY }}"
 

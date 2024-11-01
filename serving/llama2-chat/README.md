@@ -26,7 +26,7 @@ Kubernetes secret that holds the access token (which we'll need for the kserve
 deployment later on). First, encode the token to base64 by running:
 
 ```sh
-echo -n <example-token> | base64
+echo -n "<example-token>" | tr -d '\n' | base64
 ```
 
 Now, the output of the above command can be used to create the Kubernetes secret:
@@ -39,7 +39,7 @@ sed 's/HF_ACCESS_TOKEN/<example-token-base64>/' hf-token-secret.yaml | kubectl a
 Ensure there is a secret called hf-token-secret in your namespace and run this
 to create the KServe inference service:
 ```
-sed 's/IMAGE_REGISTRY/<your-image-registry>/;s/TAG/<your-tag>/' predictor.yaml | kubectl create -n <your-namespace> -f -
+sed 's|IMAGE_REGISTRY|<your-image-registry>|;s/TAG/<your-tag>/' predictor.yaml | kubectl create -n <your-namespace> -f -
 ```
 Note that you might need to change the command in the `prediction.yaml` to match your hardware.
 

@@ -6,7 +6,7 @@ spec:
   predictor:
     containers:
       - name: kserve-container
-        image: IMAGE_REGISTRY/llama2-chat:TAG
+        image: IMAGE_REGISTRY/TAG
         command:
           - "python"
         args:
@@ -25,7 +25,7 @@ spec:
               secretKeyRef:
                 name: hf-token-secret
                 key: HF_TOKEN
-        resources: 
+        resources:
           limits:
             memory: "32Gi"
             cpu: "16"
